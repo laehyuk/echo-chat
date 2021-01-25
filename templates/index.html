@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket</title>
+</head>
+<body>
+    <textarea rows="20" cols="30" id="chat"></textarea><br>
+    <input type="text" id="user"><input type="button" value="msg submit" onclick="onClick()">
+</body>
+</html>
+
+<script>
+    const ws = new WebSocket('{{.}}');
+    ws.onopen = () => {
+        let sendData = {event: 'open'}
+        ws.send(JSON.stringify(sendData));
+    }
+    ws.onmessage = (event) => {
+        console.log(event.data);
+        let recData = JSON.parse(event.data);
+        switch (recData.event) {
+            case 'res':
+                $('#chat').val($('#chat').val() + recData.data.comment + '\n');
+                break;
+            default:
+        }
+    }
+
+    function onClick() {
+        let sendData = {event: 'req', data: {comment: $('#user').val()}};
+        ws.send(JSON.stringify(sendData));
+        $('#user').val('');
+    }
+</script>
