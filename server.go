@@ -61,4 +61,3 @@ func index(writer http.ResponseWriter, request *http.Request)  {
 	template := template.Must(template.ParseFiles(path))
 	template.Execute(writer, "ws://"+request.Host+"/echo")
 }
-
